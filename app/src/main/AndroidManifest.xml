@@ -24,6 +24,14 @@
             android:name=".ProgramsActivity"
             android:label="@string/title_activity_programs" >
         </activity>
+        <activity
+            android:name=".ExerciseActivity"
+            android:label="@string/title_activity_exercise" >
+        </activity>
+        <activity
+            android:name=".ExercisesListActivity"
+            android:label="@string/title_activity_exercises_list" >
+        </activity>
     </application>
 
 </manifest>

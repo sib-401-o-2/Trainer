@@ -22,25 +22,31 @@ public class ProgramActivity extends AppCompatActivity {
         setContentView(R.layout.activity_programs);
 
         Intent intent = getIntent();
-        String pname = intent.getStringExtra("name");
-        Bundle exercises = intent.getBundleExtra("exercises");
-        int count = exercises.getInt("countdays");
+        final int id = intent.getIntExtra("id", -1);
+        int count = Storage.Programs.get(id).ExercisesId.length;
         final ProgramsGroup[] p = new ProgramsGroup[count];
         for (int i = 1; i <= count; i++)
         {
-            p[i-1] = new ProgramsGroup("День" + i, exercises.getStringArray(Integer.toString(i)));
+            int c = Storage.Programs.get(id).ExercisesId[i-1].length;
+            String[] names = new String[c];
+            for (int j = 0; j < c; j++)
+            {
+                names[j] = Storage.Exercises.get(Storage.Programs.get(id).ExercisesId[i-1][j]).Name;
+            }
+            p[i-1] = new ProgramsGroup("День" + i, names);
         }
 
-        setTitle(pname);
+        setTitle(Storage.Programs.get(id).Name);
 
         final ExpandableListView view = (ExpandableListView)findViewById(R.id.programs_list_view);
         ProgramsAdapter adapter = new ProgramsAdapter(getBaseContext(), p);
         view.setAdapter(adapter);
         view.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-
-                Toast.makeText(getBaseContext(), p[groupPosition].Values[childPosition], Toast.LENGTH_SHORT).show();
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id1) {
+                Intent intent = new Intent(getBaseContext(), ExerciseActivity.class);
+                intent.putExtra("id", Storage.Programs.get(id).ExercisesId[groupPosition][childPosition]);
+                startActivity(intent);
                 return true;
             }
         });

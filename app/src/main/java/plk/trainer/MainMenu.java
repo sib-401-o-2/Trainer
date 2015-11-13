@@ -29,6 +29,8 @@ public class MainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
+        new Storage();
+
         final ListView view = (ListView)findViewById(R.id.main_menu_list_view);
 
         final ListAdapter adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, mMenuElements);
@@ -40,6 +42,11 @@ public class MainMenu extends AppCompatActivity {
                 if (position == 1)
                 {
                     Intent intent = new Intent(getBaseContext(), ProgramsActivity.class);
+                    startActivity(intent);
+                }
+                else if (position == 2)
+                {
+                    Intent intent = new Intent(getBaseContext(), ExercisesListActivity.class);
                     startActivity(intent);
                 }
                 else
