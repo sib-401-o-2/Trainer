@@ -7,11 +7,13 @@ import java.util.List;
 public class Storage {
     public static Dictionary<Integer, Exercise> Exercises;
     public static Dictionary<Integer, Program> Programs;
+    public static Dictionary<Integer, Question> TestQuestions;
 
-    public Storage()
+    public static void Init()
     {
         Exercises = new Hashtable<>();
         Programs = new Hashtable<>();
+        TestQuestions = new Hashtable<>();
 
         Exercises.put(0, new Exercise("Жим лежа", "Лечь на спину и жать"));
         Exercises.put(1, new Exercise("Становая тяга", "тяни"));
@@ -44,5 +46,11 @@ public class Storage {
         };
         Programs.put(-1, new Program("Стандарт 1", s1));
         Programs.put(-2, new Program("Стандарт 2", s2));
+
+        String[] ans = {"Да", "Нет", "Наверное"};
+
+        TestQuestions.put(0, new Question("азаза?", ans));
+        TestQuestions.put(1, new Question("азаза2?", ans));
+        TestQuestions.put(2, new Question("азаза3?", ans));
     }
 }

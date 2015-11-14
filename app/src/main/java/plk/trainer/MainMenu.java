@@ -29,7 +29,7 @@ public class MainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        new Storage();
+        Storage.Init();
 
         final ListView view = (ListView)findViewById(R.id.main_menu_list_view);
 
@@ -39,7 +39,12 @@ public class MainMenu extends AppCompatActivity {
         view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 1)
+                if (position == 0)
+                {
+                    Intent intent = new Intent(getBaseContext(), TestActivity.class);
+                    startActivity(intent);
+                }
+                else if (position == 1)
                 {
                     Intent intent = new Intent(getBaseContext(), ProgramsActivity.class);
                     startActivity(intent);
