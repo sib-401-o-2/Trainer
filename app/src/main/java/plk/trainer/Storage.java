@@ -22,26 +22,28 @@ public class Storage {
         Exercises.put(4, new Exercise("Тяга штанги к подбородку", "тяни"));
         Exercises.put(5, new Exercise("Французский жим", "за голову лежа"));
 
-        int[][] s1 = {
+        ProgramEntry[][] s1 = {
                 {
-                        0
+                        new ProgramEntry(0, 4, 12)
                 },
                 {
-                        1
+                        new ProgramEntry(1, 2, 10),
+                        new ProgramEntry(1, 1, 8),
+                        new ProgramEntry(1, 1, 6)
                 },
                 {
-                        2
+                        new ProgramEntry(2, 4, 12)
                 }
             };
-        int[][] s2 = {
+        ProgramEntry[][] s2 = {
                 {
-                        3
+                        new ProgramEntry(3, 4, 12)
                 },
                 {
-                        4
+                        new ProgramEntry(4, 4, 12)
                 },
                 {
-                        5
+                        new ProgramEntry(5, 4, 12)
                 },
         };
         Programs.put(-1, new Program("Стандарт 1", s1));

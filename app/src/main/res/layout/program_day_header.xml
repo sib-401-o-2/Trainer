@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:id="@+id/program_day_header_text"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginRight="32dp"/>
+    <ImageButton
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginLeft="-20dp"
+        android:layout_marginTop="13dp"
+        android:id="@+id/program_day_header_button"
+        android:contentDescription="@android:string/VideoView_error_text_invalid_progressive_playback"
+        android:focusable="false"
+        />
+</LinearLayout>

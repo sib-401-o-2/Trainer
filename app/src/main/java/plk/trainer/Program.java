@@ -2,11 +2,11 @@ package plk.trainer;
 
 public class Program {
     public String Name;
-    public int[][] ExercisesId;
+    public ProgramEntry[][] Exercises;
 
-    public Program(String name, int[][] exercisesid)
+    public Program(String name, ProgramEntry[][] exercises)
     {
         Name = name;
-        ExercisesId = exercisesid;
+        Exercises = exercises;
     }
 }
