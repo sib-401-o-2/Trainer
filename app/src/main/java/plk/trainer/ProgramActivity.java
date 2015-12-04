@@ -43,7 +43,7 @@ public class ProgramActivity extends AppCompatActivity {
         setTitle(Storage.Programs.get(id).Name);
 
         final ExpandableListView view = (ExpandableListView)findViewById(R.id.programs_list_view);
-        ProgramAdapter adapter = new ProgramAdapter(getBaseContext(), p);
+        ProgramAdapter adapter = new ProgramAdapter(getBaseContext(), p, id);
         view.setAdapter(adapter);
         view.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override

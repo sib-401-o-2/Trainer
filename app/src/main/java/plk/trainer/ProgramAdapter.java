@@ -1,21 +1,26 @@
 package plk.trainer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class ProgramAdapter extends BaseExpandableListAdapter {
 
     Context mContext;
     ProgramsGroup[] mPrograms;
+    int mProgramId;
 
-    public ProgramAdapter(Context context, ProgramsGroup[] programs)
+    public ProgramAdapter(Context context, ProgramsGroup[] programs, int programId)
     {
         mContext = context;
         mPrograms = programs;
+        mProgramId = programId;
     }
 
     @Override
@@ -54,7 +59,7 @@ public class ProgramAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+    public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         if (convertView == null)
         {
             LayoutInflater inf = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -63,6 +68,17 @@ public class ProgramAdapter extends BaseExpandableListAdapter {
 
         TextView v = (TextView) convertView.findViewById(R.id.program_day_header_text);
         v.setText("\t" + mPrograms[groupPosition].Name);
+
+        ImageButton b = (ImageButton) convertView.findViewById(R.id.program_day_header_button);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, DayTrainingActivity.class);
+                intent.putExtra("pid", mProgramId);
+                intent.putExtra("daynum", groupPosition);
+                v.getContext().startActivity(intent);
+            }
+        });
 
         return convertView;
     }
