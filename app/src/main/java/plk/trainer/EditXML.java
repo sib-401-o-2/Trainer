@@ -2,8 +2,12 @@ package plk.trainer;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -66,6 +70,43 @@ public class EditXML {
             pr.appendChild(day);
         }
         return pr;
+    }
+
+    static List<Program> parsePrograms(String path) {
+        try {
+            List<Program> out = new ArrayList<Program>();
+            icFactory = DocumentBuilderFactory.newInstance();
+            icBuilder = icFactory.newDocumentBuilder();
+            doc = icBuilder.parse(path + ".xml");
+            NodeList nList = doc.getElementsByTagName("program");
+
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+
+                Element eElement = (Element)nList.item(temp);
+                String name = eElement.getAttribute("name");
+
+                NodeList days = eElement.getChildNodes();
+
+                ProgramEntry[][] exer = new ProgramEntry[days.getLength()][];
+
+                for (int day = 0; day < days.getLength(); day++) {
+                    NodeList exercises = days.item(day).getChildNodes();
+                    ProgramEntry[] entry = new ProgramEntry[exercises.getLength()];
+                    for (int exercise = 0; exercise < days.getLength(); exercise++) {
+                        Element ex = (Element)exercises.item(temp);
+                        int id = Integer.parseInt(ex.getAttribute("id"));
+                        int times = Integer.parseInt(ex.getAttribute("times"));
+                        int repeats = Integer.parseInt(ex.getAttribute("repeats"));
+                        entry[exercise] = new ProgramEntry(id, times, repeats);
+                    }
+                    exer[day] = entry;
+                }
+                out.add(new Program(name, exer));
+            }
+            return out;
+        }catch(Exception e){
+            return null;
+        }
     }
 
 }
