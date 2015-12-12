@@ -29,7 +29,7 @@ public class MainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        Storage.Init();
+        Storage.Init(getBaseContext());
 
         final ListView view = (ListView)findViewById(R.id.main_menu_list_view);
 

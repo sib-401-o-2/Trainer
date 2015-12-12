@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<storage>
+  <exercises>
+    <exercise id="0" name="Жим лежа" description="" image="drawable/jim_leja" video=""/>
+    <exercise id="1" name="Становая тяга" description="" image="drawable/stanovaya_tyaga" video=""/>
+    <exercise id="2" name="Присяд" description="" image="drawable/prisyad" video=""/>
+    <exercise id="3" name="Армейский жим" description="" image="drawable/army_jim" video=""/>
+    <exercise id="4" name="Тяга штанги к подбородку" description="" image="drawable/tyga_k_pod" video=""/>
+    <exercise id="5" name="Французкий жим" description="" image="drawable/france_jim" video=""/>
+  </exercises>
+  <programs>
+    <program id="-1" name ="Стандарт 1">
+      <day>
+        <exercise id="0" times="4" repeats="10"/>
+      </day>
+      <day>
+        <exercise id="1" times="2" repeats="10"/>
+        <exercise id="1" times="1" repeats="8"/>
+        <exercise id="1" times="1" repeats="6"/>
+      </day>
+      <day>
+        <exercise id="2" times="4" repeats="4"/>
+      </day>
+    </program>
+    <program id="-2" name ="Стандарт 3">
+      <day>
+        <exercise id="1" times="4" repeats="555"/>
+      </day>
+      <day>
+        <exercise id="4" times="4" repeats="10"/>
+      </day>
+      <day>
+        <exercise id="5" times="4" repeats="10"/>
+      </day>
+    </program>
+  </programs>
+  <test>
+    <questions>
+      <question id="0" text="Сколько дней?">
+        <ans name="3">
+          <useprog days="3"/>
+        </ans>
+        <ans name="4">
+          <useprog days="4"/>
+        </ans>
+      </question>
+      <question id="1" text="травмы спины">
+        <ans name="да">
+          <exclude_exercise id="1"/>
+        </ans>
+        <ans name="нет">
+        </ans>
+      </question>
+      <question id="2" text="травмы ног">
+        <ans name="да">
+          <exclude_exercise id="2"/>
+        </ans>
+        <ans name="нет">
+        </ans>
+      </question>
+      <question id="3" text="любительская тренировка">
+        <ans name="да">
+          <replace_exercise id="1">
+            <exercise id="1" times="4" repeats="6"/>
+          </replace_exercise>
+        </ans>
+        <ans name="нет">
+        </ans>
+      </question>
+    </questions>
+    <base_programs>
+      <base_prog days="3">
+        <day id="0">
+          <exercise id="0" times="4" repeats="10"/>
+        </day>
+        <day id="1">
+          <exercise id="1" times="2" repeats="10"/>
+          <exercise id="1" times="1" repeats="8"/>
+          <exercise id="1" times="1" repeats="6"/>
+          <exercise id="5" times="4" repeats="10"/>
+        </day>
+        <day id="2">
+          <exercise id="2" times="4" repeats="4"/>
+          <exercise id="3" times="4" repeats="10"/>
+          <exercise id="4" times="4" repeats="10"/>
+        </day>
+      </base_prog>
+      <base_prog days="4">
+        <day id="0">
+          <exercise id="0" times="4" repeats="10"/>
+        </day>
+        <day id="1">
+          <exercise id="1" times="2" repeats="10"/>
+          <exercise id="1" times="1" repeats="8"/>
+          <exercise id="1" times="1" repeats="6"/>
+          <exercise id="5" times="4" repeats="10"/>
+        </day>
+        <day id="2">
+          <exercise id="2" times="4" repeats="4"/>
+          <exercise id="3" times="4" repeats="10"/>
+          <exercise id="4" times="4" repeats="10"/>
+        </day>
+        <day id="3">
+          <exercise id="2" times="4" repeats="4"/>
+          <exercise id="3" times="4" repeats="10"/>
+          <exercise id="4" times="4" repeats="10"/>
+        </day>
+      </base_prog>
+    </base_programs>
+  </test>
+</storage>
