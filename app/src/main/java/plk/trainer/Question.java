@@ -3,11 +3,12 @@ package plk.trainer;
 
 public class Question {
     String Name;
-    String[] Ansewers;
+    String[] Answers;
+    int CurrentAnswer = 0;
 
-    public Question(String name, String[] ansewers)
+    public Question(String name, String[] answers)
     {
         Name = name;
-        Ansewers = ansewers;
+        Answers = answers;
     }
 }

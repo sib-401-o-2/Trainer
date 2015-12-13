@@ -1,13 +1,18 @@
 package plk.trainer;
 
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class TestAdapter implements ListAdapter
@@ -62,16 +67,28 @@ public class TestAdapter implements ListAdapter
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        LayoutInflater inf = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null)
         {
-            LayoutInflater inf = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inf.inflate(R.layout.test_question_layout, null);
+            //LayoutInflater inf = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                convertView = inf.inflate(R.layout.test_question_layout, null);
         }
 
         TextView v = (TextView)convertView.findViewById(R.id.test_question_name);
         v.setText(Storage.TestQuestions.get(position).Name);
-        
 
+        RadioGroup r = (RadioGroup) convertView.findViewById(R.id.test_question_rg);
+        for (int i = 0; i < Storage.TestQuestions.size(); i++) {
+            inf.inflate(R.layout.test_question_rb_layout, r);
+            RadioButton rb = (RadioButton) r.findViewById(R.id.test_question_rb);
+            rb.setText(Storage.TestQuestions.get(position).Answers[i]);
+            rb.setId(i);
+            //convertView.setTag(i, rb);
+            if (i == 0) {
+                rb.setChecked(true);
+            }
+        }
 
         return convertView;
     }

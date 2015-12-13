@@ -21,6 +21,7 @@ public class TestActivity extends AppCompatActivity {
 
         final ListView view = (ListView)findViewById(R.id.test_list_view);
 
+
         final ListAdapter adapter = new TestAdapter(getBaseContext());
         view.setAdapter(adapter);
     }
