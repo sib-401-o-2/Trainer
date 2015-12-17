@@ -34,7 +34,6 @@ public class ProgramActivity extends AppCompatActivity {
             {
 
                 names[j] = Storage.Exercises.get(Storage.Programs.get(id).Exercises[i-1][j].ExerciseId).Name + "\n" +
-                        Storage.Programs.get(id).Exercises[i-1][j].Times + "/" +
                         Storage.Programs.get(id).Exercises[i-1][j].Repeats;
             }
             p[i-1] = new ProgramsGroup("День" + i, names);

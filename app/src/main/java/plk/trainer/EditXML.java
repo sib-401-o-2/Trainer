@@ -2,6 +2,7 @@ package plk.trainer;
 
 import android.content.Context;
 import android.net.Uri;
+import android.widget.Toast;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -66,8 +67,7 @@ public class EditXML {
             {
                 Element exercise = doc.createElement("exercise");
                 exercise.setAttribute("id", Integer.toString(program.Exercises[i][j].ExerciseId));
-                exercise.setAttribute("times", Integer.toString(program.Exercises[i][j].Times));
-                exercise.setAttribute("repeats", Integer.toString(program.Exercises[i][j].Repeats));
+                exercise.setAttribute("repeats", program.Exercises[i][j].Repeats);
                 day.appendChild(exercise);
             }
 
@@ -100,9 +100,8 @@ public class EditXML {
                     for (int exercise = 0; exercise < exercises.getLength(); exercise++) {
                         Element ex = (Element)exercises.item(exercise);
                         int id = Integer.parseInt(ex.getAttribute("id"));
-                        int times = Integer.parseInt(ex.getAttribute("times"));
-                        int repeats = Integer.parseInt(ex.getAttribute("repeats"));
-                        entry[exercise] = new ProgramEntry(id, times, repeats);
+                        String repeats = ex.getAttribute("repeats");
+                        entry[exercise] = new ProgramEntry(id, repeats);
                     }
                     exer[day] = entry;
                 }
@@ -130,9 +129,118 @@ public class EditXML {
                 String name = eElement.getAttribute("name");
                 int pid = Integer.parseInt(eElement.getAttribute("id"));
                 String desc = eElement.getAttribute("description");
-                out.put(pid, new Exercise(name, desc));
+                String vid = eElement.getAttribute("video");
+                String img = eElement.getAttribute("image");
+                out.put(pid, new Exercise(name, desc, vid, img));
             }
             return out;
+        }
+        catch(Exception e){
+            return null;
+        }
+    }
+
+    static Dictionary<Integer,Question> parseQuestions(InputStream path) {
+        try {
+            Dictionary<Integer, Question> out = new Hashtable<>();
+            icFactory = DocumentBuilderFactory.newInstance();
+            icBuilder = icFactory.newDocumentBuilder();
+            doc = icBuilder.parse(path);
+            NodeList nList = doc.getElementsByTagName("question");
+
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+
+                Element eElement = (Element)nList.item(temp);
+                String name = eElement.getAttribute("text");
+                int pid = Integer.parseInt(eElement.getAttribute("id"));
+
+                NodeList ans = eElement.getElementsByTagName("ans");
+
+                String[] anss = new String[ans.getLength()];
+
+                for (int a = 0; a < ans.getLength(); a++) {
+                    Element e = (Element)ans.item(a);
+                    anss[a] = e.getAttribute("name");
+                }
+                out.put(pid, new Question(name, anss));
+            }
+            return out;
+        }
+        catch(Exception e){
+            return null;
+        }
+    }
+
+    static Program CreateCustomProgramBasedOnTest(InputStream path, String programName)
+    {
+        try {
+            icFactory = DocumentBuilderFactory.newInstance();
+            icBuilder = icFactory.newDocumentBuilder();
+            doc = icBuilder.parse(path);
+            NodeList nList = doc.getElementsByTagName("question");
+
+            List<List<ProgramEntry>> base = new ArrayList<>();
+
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+                Element eElement = (Element)nList.item(temp);
+                int pid = Integer.parseInt(eElement.getAttribute("id"));
+                NodeList ans = eElement.getElementsByTagName("ans");
+                Element e = (Element)ans.item(Storage.TestQuestions.get(temp).CurrentAnswer);
+                NodeList use_prog = e.getElementsByTagName("useprog");
+                for (int a = 0; a < use_prog.getLength(); a++)
+                {
+                    String tag = ((Element)use_prog.item(a)).getAttribute("tag");
+                    NodeList nList1 = doc.getElementsByTagName("base_prog");
+
+                    for (int temp1 = 0; temp1 < nList1.getLength(); temp1++) {
+
+                        Element eElement1 = (Element)nList1.item(temp1);
+                        String name = eElement1.getAttribute("tag");
+                        if (!name.equals(tag)) continue;
+
+                        NodeList days = eElement1.getElementsByTagName("day");
+
+                        List<List<ProgramEntry>> exer = new ArrayList<>();
+
+                        for (int day = 0; day < days.getLength(); day++) {
+                            NodeList exercises = ((Element)days.item(day)).getElementsByTagName("exercise");
+                            List<ProgramEntry> entry = new ArrayList<>();
+                            for (int exercise = 0; exercise < exercises.getLength(); exercise++) {
+                                Element ex = (Element)exercises.item(exercise);
+                                int id = Integer.parseInt(ex.getAttribute("id"));
+                                String repeats = ex.getAttribute("repeats");
+                                entry.add(new ProgramEntry(id, repeats));
+                            }
+                            exer.add(entry);
+                        }
+                        base = exer;
+                    }
+                }
+                NodeList exclude = e.getElementsByTagName("exclude_exercise");
+                for (int a = 0; a < exclude.getLength(); a++)
+                {
+                    String ids = ((Element)exclude.item(a)).getAttribute("id");
+                    int idi = Integer.parseInt(ids);
+                    for (int x = 0; x < base.size(); x++) {
+                        for (int y = 0; y < base.get(x).size(); y++) {
+                            if (base.get(x).get(y).ExerciseId == idi)
+                            {
+                                base.get(x).remove(y);
+                                y--;
+                            }
+                        }
+                    }
+                }
+            }
+            ProgramEntry[][] pre = new ProgramEntry[base.size()][];
+            for (int x = 0; x < base.size(); x++) {
+                ProgramEntry[] pre1 = new ProgramEntry[base.get(x).size()];
+                for (int y = 0; y < base.get(x).size(); y++) {
+                    pre1[y] = base.get(x).get(y);
+                }
+                pre[x]=pre1;
+            }
+            return new Program(programName, pre);
         }
         catch(Exception e){
             return null;

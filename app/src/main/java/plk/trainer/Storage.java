@@ -14,22 +14,16 @@ public class Storage {
     public static Dictionary<Integer, Exercise> Exercises;
     public static Dictionary<Integer, Program> Programs;
     public static Dictionary<Integer, Question> TestQuestions;
+    public static int MaxId = 0;
 
     public static void Init(Context context)
     {
-        TestQuestions = new Hashtable<>();
-
         Resources re = context.getResources();
         InputStream res = re.openRawResource(R.raw.db_android);
         Exercises = EditXML.parseExercises(res);
         res = re.openRawResource(R.raw.db_android);
         Programs = EditXML.parsePrograms(res);
-
-
-        String[] ans = {"Да", "Нет", "Наверное"};
-
-        TestQuestions.put(0, new Question("азаза?", ans));
-        TestQuestions.put(1, new Question("азаза2?", ans));
-        TestQuestions.put(2, new Question("азаза3?", ans));
+        res = re.openRawResource(R.raw.db_android);
+        TestQuestions = EditXML.parseQuestions(res);
     }
 }

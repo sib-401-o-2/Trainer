@@ -48,7 +48,7 @@ public class ProgramsActivity extends AppCompatActivity {
         }
         for (int j = 0; j < cu; j++)
         {
-            namess[j] = Storage.Programs.get(j).Name;
+            namesu[j] = Storage.Programs.get(j).Name;
         }
         p[0] = new ProgramsGroup("Стандартные", namess);
         p[1] = new ProgramsGroup("Пользовательские", namesu);

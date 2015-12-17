@@ -10,15 +10,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="13dp"
         android:layout_marginRight="32dp"/>
-    <ImageButton
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginLeft="-36dp"
-        android:layout_marginTop="8dp"
-        android:id="@+id/program_day_header_button"
-        android:contentDescription="@android:string/VideoView_error_text_invalid_progressive_playback"
-        android:focusable="false"
-        android:src="@drawable/button"
-        android:scaleType="centerInside"/>
+
 
 </LinearLayout>

@@ -69,17 +69,6 @@ public class ProgramAdapter extends BaseExpandableListAdapter {
         TextView v = (TextView) convertView.findViewById(R.id.program_day_header_text);
         v.setText("\t" + mPrograms[groupPosition].Name);
 
-        ImageButton b = (ImageButton) convertView.findViewById(R.id.program_day_header_button);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, DayTrainingActivity.class);
-                intent.putExtra("pid", mProgramId);
-                intent.putExtra("daynum", groupPosition);
-                v.getContext().startActivity(intent);
-            }
-        });
-
         return convertView;
     }
 

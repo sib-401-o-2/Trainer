@@ -67,28 +67,13 @@ public class TestAdapter implements ListAdapter
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inf = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null)
         {
-            //LayoutInflater inf = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                convertView = inf.inflate(R.layout.test_question_layout, null);
+            convertView = new TestRowView(mContext);
         }
 
-        TextView v = (TextView)convertView.findViewById(R.id.test_question_name);
-        v.setText(Storage.TestQuestions.get(position).Name);
-
-        RadioGroup r = (RadioGroup) convertView.findViewById(R.id.test_question_rg);
-        for (int i = 0; i < Storage.TestQuestions.size(); i++) {
-            inf.inflate(R.layout.test_question_rb_layout, r);
-            RadioButton rb = (RadioButton) r.findViewById(R.id.test_question_rb);
-            rb.setText(Storage.TestQuestions.get(position).Answers[i]);
-            rb.setId(i);
-            //convertView.setTag(i, rb);
-            if (i == 0) {
-                rb.setChecked(true);
-            }
-        }
+        TestRowView trv = (TestRowView) convertView;
+        trv.SetQuestion(Storage.TestQuestions.get(position));
 
         return convertView;
     }
