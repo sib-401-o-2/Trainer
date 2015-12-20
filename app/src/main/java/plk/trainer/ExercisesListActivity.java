@@ -19,6 +19,11 @@ public class ExercisesListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
+        if(Storage.Exercises.size() == 0)
+        {
+            Storage.Init(this);
+        }
+
         setTitle("Список упражнений");
 
         int count = Storage.Exercises.size();

@@ -20,6 +20,11 @@ public class ExerciseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
 
+        if(Storage.Exercises.size() == 0)
+        {
+            Storage.Init(this);
+        }
+
         Intent intent = getIntent();
         final int id = intent.getIntExtra("id", -1);
         setTitle(Storage.Exercises.get(id).Name);

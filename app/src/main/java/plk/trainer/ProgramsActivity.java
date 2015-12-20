@@ -26,12 +26,18 @@ import java.util.List;
 public class ProgramsActivity extends AppCompatActivity {
 
     final List<Integer> custProgKeys = new ArrayList<Integer>();
-    ProgramsAdapter adapter;
+
+    ExpandableListView view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_programs);
+
+        if(Storage.Exercises.size() == 0)
+        {
+            Storage.Init(this);
+        }
 
         final ProgramsGroup[] p = new ProgramsGroup[2];
         Enumeration<Integer> k = Storage.Programs.keys();
@@ -65,8 +71,8 @@ public class ProgramsActivity extends AppCompatActivity {
         p[0] = new ProgramsGroup("Стандартные", namess);
         p[1] = new ProgramsGroup("Пользовательские", namesu);
 
-        ExpandableListView view = (ExpandableListView)findViewById(R.id.programs_list_view);
-        adapter = new ProgramsAdapter(getBaseContext(), p);
+        view = (ExpandableListView)findViewById(R.id.programs_list_view);
+        ProgramsAdapter adapter = new ProgramsAdapter(getBaseContext(), p);
         view.setAdapter(adapter);
         view.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
@@ -116,9 +122,10 @@ public class ProgramsActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 int id = custProgKeys.get(position);
                 Storage.Programs.remove(custProgKeys.get(position));
-               // view.removeView(v);
                 EditXML.deleteElement(id, new File(getBaseContext().getFilesDir(), "programs.xml"));
                 custProgKeys.remove(position);
+                setAdapter();
+
             }
         });
         builder.setNegativeButton("Нет", new DialogInterface.OnClickListener(){
@@ -129,6 +136,45 @@ public class ProgramsActivity extends AppCompatActivity {
         });
         AlertDialog dialog = builder.create();
         return dialog;
+    }
+
+    void setAdapter()
+    {
+        final ProgramsGroup[] p = new ProgramsGroup[2];
+        Enumeration<Integer> k = Storage.Programs.keys();
+        int cs = 0, cu = 0;
+
+        while(k.hasMoreElements())
+        {
+            int kk = k.nextElement();
+            if (kk < 0)
+            {
+                cs++;
+            }
+            else
+            {
+                custProgKeys.add(kk);
+                cu++;
+            }
+        }
+
+        String[] namess = new String[cs];
+        String[] namesu = new String[cu];
+        for (int j = 1; j <= cs; j++)
+        {
+            namess[j-1] = Storage.Programs.get(-j).Name;
+        }
+        for (int j = 0; j < cu; j++)
+        {
+            namesu[j] = Storage.Programs.get(custProgKeys.get(j)).Name;
+        }
+
+        p[0] = new ProgramsGroup("Стандартные", namess);
+        p[1] = new ProgramsGroup("Пользовательские", namesu);
+
+        ProgramsAdapter adapter = new ProgramsAdapter(getBaseContext(), p);
+        view.setAdapter(adapter);
+
     }
 
 }
