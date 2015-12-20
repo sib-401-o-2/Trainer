@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.InputStream;
 
 public class TestActivity extends AppCompatActivity {
@@ -25,7 +26,6 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test);
 
         final ListView view = (ListView)findViewById(R.id.test_list_view);
-
 
         final ListAdapter adapter = new TestAdapter(getBaseContext());
         view.setAdapter(adapter);
@@ -43,8 +43,9 @@ public class TestActivity extends AppCompatActivity {
                 }
                 Resources re = getResources();
                 InputStream res = re.openRawResource(R.raw.db_android);
-                Program p = EditXML.CreateCustomProgramBasedOnTest(res, t);
-                Storage.Programs.put(Storage.MaxId++, p);
+                ++Storage.MaxId;
+                Program p = EditXML.CreateCustomProgramBasedOnTest(res, t, new File(getBaseContext().getFilesDir(), "programs.xml"));
+                Storage.Programs.put(Storage.MaxId, p);
                 finish();
             }
         });

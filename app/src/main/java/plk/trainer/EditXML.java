@@ -1,7 +1,9 @@
 package plk.trainer;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.w3c.dom.Document;
@@ -25,16 +27,35 @@ import javax.xml.transform.stream.StreamResult;
 
 public class EditXML {
 
-    static int id = 0;//Временно
     static DocumentBuilderFactory icFactory;
     static DocumentBuilder icBuilder;
     static Document doc;
 
-    static void addElement(Program program){
+    static void initXML(File path){
         try {
             icFactory = DocumentBuilderFactory.newInstance();
             icBuilder = icFactory.newDocumentBuilder();
-            doc = icBuilder.parse("programs.xml");
+            TransformerFactory transformerFactory = TransformerFactory
+                    .newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            Document newDoc = icBuilder.newDocument();
+            Element rootElement = newDoc.createElement("programs");
+            newDoc.appendChild(rootElement);
+            DOMSource source = new DOMSource(newDoc);
+            StreamResult result = new StreamResult(path);
+            transformer.transform(source, result);
+        }
+        catch(Exception ignored) {
+            Log.e("hm", ignored.toString());
+        }
+    }
+
+
+    static void addElement(Program program, File path){
+        try {
+            icFactory = DocumentBuilderFactory.newInstance();
+            icBuilder = icFactory.newDocumentBuilder();
+            doc = icBuilder.parse(path);
 
             Element programs = (Element) doc.getElementsByTagName("programs")
                     .item(0);
@@ -42,23 +63,55 @@ public class EditXML {
             Element newPerson = createProgram(program);
 
             programs.appendChild(newPerson);
+            TransformerFactory transformerFactory = TransformerFactory
+                    .newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(path);
+            transformer.transform(source, result);
+        }
+        catch(Exception ignored) {
+            Log.e("hm", ignored.toString());
+        }
+    }
+
+    static void deleteElement(int id, File path){
+        try {
+            icFactory = DocumentBuilderFactory.newInstance();
+            icBuilder = icFactory.newDocumentBuilder();
+            doc = icBuilder.parse(path);
+
+            Element root = (Element)doc.getElementsByTagName("programs").item(0);
+            NodeList nList = doc.getElementsByTagName("program");
+
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+
+                Element eElement = (Element) nList.item(temp);
+
+                int pid = Integer.parseInt(eElement.getAttribute("id"));
+
+                if (pid == id) {
+                    root.removeChild(nList.item(temp));
+                    break;
+                }
+            }
 
             TransformerFactory transformerFactory = TransformerFactory
                     .newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("programs.xml"));
+            StreamResult result = new StreamResult(path);
             transformer.transform(source, result);
         }
         catch(Exception ignored) {
-
+            Log.e("hm", ignored.toString());
         }
     }
 
     static Element createProgram(Program program)
     {
         Element pr = doc.createElement("program");
-        pr.setAttribute("id", Integer.toString(id));
+        pr.setAttribute("id", Integer.toString(Storage.MaxId));
         pr.setAttribute("name", program.Name);
         for(int i = 0; i < program.Exercises.length; ++i)
         {
@@ -76,12 +129,14 @@ public class EditXML {
         return pr;
     }
 
-    static Dictionary<Integer,Program> parsePrograms(InputStream path) {
+
+
+    static Dictionary<Integer,Program> parsePrograms(InputStream basePath, File custPath) {
         try {
             Dictionary<Integer, Program> out = new Hashtable<>();
             icFactory = DocumentBuilderFactory.newInstance();
             icBuilder = icFactory.newDocumentBuilder();
-            doc = icBuilder.parse(path);
+            doc = icBuilder.parse(basePath);
             NodeList nList = doc.getElementsByTagName("program");
 
             for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -107,9 +162,46 @@ public class EditXML {
                 }
                 out.put(pid, new Program(name, exer));
             }
+
+            icFactory = DocumentBuilderFactory.newInstance();
+            icBuilder = icFactory.newDocumentBuilder();
+            doc = icBuilder.parse(custPath);
+            nList = doc.getElementsByTagName("program");
+
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+
+                Element eElement = (Element)nList.item(temp);
+                String name = eElement.getAttribute("name");
+                Log.e("hm", name);
+                int pid = Integer.parseInt(eElement.getAttribute("id"));
+
+                if(pid > Storage.MaxId)
+                {
+                    Storage.MaxId = pid;
+                }
+                Log.e("hm", Integer.toString(pid));
+                NodeList days = eElement.getElementsByTagName("day");
+
+                ProgramEntry[][] exer = new ProgramEntry[days.getLength()][];
+
+                for (int day = 0; day < days.getLength(); day++) {
+                    NodeList exercises = ((Element)days.item(day)).getElementsByTagName("exercise");
+                    ProgramEntry[] entry = new ProgramEntry[exercises.getLength()];
+                    for (int exercise = 0; exercise < exercises.getLength(); exercise++) {
+                        Element ex = (Element)exercises.item(exercise);
+                        int id = Integer.parseInt(ex.getAttribute("id"));
+                        String repeats = ex.getAttribute("repeats");
+                        entry[exercise] = new ProgramEntry(id, repeats);
+                    }
+                    exer[day] = entry;
+                }
+                out.put(pid, new Program(name, exer));
+            }
+
             return out;
         }
         catch(Exception e){
+            Log.e("hm", e.toString());
             return null;
         }
     }
@@ -171,7 +263,7 @@ public class EditXML {
         }
     }
 
-    static Program CreateCustomProgramBasedOnTest(InputStream path, String programName)
+    static Program CreateCustomProgramBasedOnTest(InputStream path, String programName, File savePath)
     {
         try {
             icFactory = DocumentBuilderFactory.newInstance();
@@ -240,7 +332,9 @@ public class EditXML {
                 }
                 pre[x]=pre1;
             }
-            return new Program(programName, pre);
+            Program out = new Program(programName, pre);
+            addElement(out, savePath);
+            return out;
         }
         catch(Exception e){
             return null;

@@ -23,9 +23,8 @@ public class ExerciseActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final int id = intent.getIntExtra("id", -1);
         setTitle(Storage.Exercises.get(id).Name);
-
         TextView view = (TextView)findViewById(R.id.exercise_text);
-        view.setText(Storage.Exercises.get(id).Description);
+        view.setText(Storage.Exercises.get(id).Description.replace("\\n", "\n"));
 
         Button b = (Button)findViewById(R.id.ex_woy);
         b.setOnClickListener(new View.OnClickListener() {
@@ -39,6 +38,10 @@ public class ExerciseActivity extends AppCompatActivity {
         });
 
         ImageView iv = (ImageView)findViewById(R.id.exercise_image);
-        iv.setImageURI(Uri.parse(Storage.Exercises.get(id).Image));
+        iv.setImageResource(getRes(Storage.Exercises.get(id).Image, "drawable"));
+    }
+
+    int getRes(String f, String p) {
+        return getResources().getIdentifier(f, p, getPackageName());
     }
 }
