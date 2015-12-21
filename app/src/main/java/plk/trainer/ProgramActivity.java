@@ -22,6 +22,11 @@ public class ProgramActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_programs);
 
+        if(Storage.Exercises == null)
+        {
+            Storage.Init(this);
+        }
+
         Intent intent = getIntent();
         final int id = intent.getIntExtra("id", -1);
         int count = Storage.Programs.get(id).Exercises.length;

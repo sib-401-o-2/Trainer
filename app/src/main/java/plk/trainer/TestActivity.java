@@ -25,6 +25,11 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
+        if(Storage.Exercises == null)
+        {
+            Storage.Init(this);
+        }
+
         final ListView view = (ListView)findViewById(R.id.test_list_view);
 
         final ListAdapter adapter = new TestAdapter(getBaseContext());

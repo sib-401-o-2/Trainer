@@ -20,7 +20,7 @@ public class ExerciseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
 
-        if(Storage.Exercises.size() == 0)
+        if(Storage.Exercises == null)
         {
             Storage.Init(this);
         }

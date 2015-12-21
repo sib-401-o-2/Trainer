@@ -19,7 +19,7 @@ public class ExercisesListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        if(Storage.Exercises.size() == 0)
+        if(Storage.Exercises == null)
         {
             Storage.Init(this);
         }
